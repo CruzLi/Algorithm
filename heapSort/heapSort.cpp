@@ -22,36 +22,38 @@ public:
 		for (int k = (N - 1) / 2; k >= 0; k--)
 			sink(a, k, N);
 				
-		/*
-		while (N > 0)
+		
+		/*while (N > 0)
 		{
 			swap(a[0], a[N - 1]); N--;
 			sink(a, 0, N);
-		}*/
-
+		}
+		*/
 
 		//改进，先下沉再上浮
 		while (N > 0)
 		{
 			int temp = a[N - 1];
-			a[N - 1] = a[0]; N--; //把最大元素放在数组末尾，堆序列长度减1。
+			a[N - 1] = a[0]; a[0] = 0; N--; //把最大元素放在数组末尾，堆序列长度减1。
 			int k = 0; //根节点 
 			int j = 2 * k + 1;//左子节点
 			while (j <= N - 1)
 			{
-				if (j < N - 1 && a[j] < a[j + 1]) j++;
+				if (j < N - 1 && a[j] < a[j + 1]) j++; 
 				a[k] = a[j]; //用子节点中较大的结点替代根节点
 				k = j; j = 2 * k + 1;
 			}
-			a[j/2] = temp; //把堆尾元素放入空缺节点	
+
+			a[k] = temp; //把堆尾元素放入空缺节点
+			swim(a, k); 
 		}
 	}
 
 	void sink(vector<int> &a, int k, int N)
 	{
-		while (2 * k + 1 <= N - 1)
+		int j = 2 * k + 1;
+		while (j <= N - 1)
 		{
-			int j = 2 * k + 1;
 			if (j < N - 1 && a[j] < a[j + 1]) j++;
 			if (a[k] >= a[j]) break;
 			swap(a[k], a[j]);
@@ -59,14 +61,23 @@ public:
 		}
 	}
 
-	void swim(vector<int> &a, int k, int N)
+	void swim(vector<int> &a, int k)
 	{
-		while (k > 0 && k / 2 < k)
+		while (k > 0)
 		{
-			swap(a[k / 2], a[k]);
-			k = k / 2;
+			if (k % 2)
+			{
+				if (a[k / 2] < a[k]) swap(a[k / 2], a[k]); 
+				k = k / 2;
+			}
+			else
+			{
+				if (a[k / 2 - 1] < a[k]) swap(a[k / 2 - 1], a[k]); 
+				k = k / 2 - 1;
+			}	
 		}
 	}
+
 	void insert(vector<int> &a, int lo, int hi)
 	{
 		int i, j, min;
