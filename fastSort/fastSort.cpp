@@ -62,6 +62,8 @@ public:
 		//int v = a[lo];
 		int v = getRandom(a, lo, hi);// 通过随机数保证取得的基准元素的随机性
 		//int v = selectMiddle(a, lo, hi); //三数取中法
+		//首部基准元素不变，两边数组元素依次对换
+		/*
 		while (true)
 		{
 			while (a[++i] < v);
@@ -70,7 +72,20 @@ public:
 			swap(a[i], a[j]);
 		}
 		swap(a[lo], a[j]);
-		return j;
+		*/
+		//后前依次查找，每次移动一位
+		while (i < j)
+		{
+			while (i < j && a[j] > v) --j;
+			if (j <= i) break;
+			a[i] = a[j];
+			while (i < j && a[i] < v) ++i;
+			if (j <= i) break;
+			a[j] = a[i];
+		}
+
+		a[i] = v;
+		return i;
 	}
 
 	void insert(vector<int> &a, int lo, int hi)
@@ -91,7 +106,7 @@ int main()
 	LARGE_INTEGER nFreq;
 	LARGE_INTEGER nBeginTime;
 	LARGE_INTEGER nEndTime;
-	int N = 100;
+	int N = 10;
 	//vector<int> vec{ 3, 7, 1, 5, 9, 2, 6, 4, 8, 15 };
 	vector<int> vec;
 	for (int i = 0; i < N; i++)

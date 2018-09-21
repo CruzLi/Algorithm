@@ -63,6 +63,7 @@ public:
 
 	void swim(vector<int> &a, int k)
 	{
+		//因为根节点不是从零开始，所以父节点索引存在两种可能
 		while (k > 0)
 		{
 			if (k % 2)
